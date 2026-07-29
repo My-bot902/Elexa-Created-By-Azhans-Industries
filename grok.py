@@ -64,7 +64,7 @@ def process_command(command):
 
     if "elexa" in command:
         response = "Yes Boss!"
-    elif "open youtube" in command or "youtube kholo" in command:
+    elif "open youtube" in command or "youtube kholo" in command or "youtube" in command:
         response = "Opening YouTube"
         action = "open_url"
         url = "https://youtube.com"
