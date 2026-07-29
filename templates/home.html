@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CodingWithAzhan | Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body {
+            background: #0a0b10;
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .home-container {
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .brand-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            background: linear-gradient(to right, #00d2ff, #9d50bb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 50px;
+            word-wrap: break-word;
+        }
+
+        @keyframes glow {
+            from {
+                filter: drop-shadow(0 0 10px #00d2ff);
+            }
+
+            to {
+                filter: drop-shadow(0 0 30px #9d50bb);
+            }
+        }
+
+        .enter-btn {
+            border: 2px solid #00d2ff;
+            color: #00d2ff;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.4s;
+            display: inline-block;
+        }
+
+        .enter-btn:hover {
+            background: #00d2ff;
+            color: #0a0b10;
+            box-shadow: 0 0 40px #00d2ff;
+            transform: scale(1.1);
+        }
+
+        /* 📱 360px Mobile Optimization */
+        @media (max-width: 400px) {
+            .brand-name {
+                font-size: 2.1rem; /* Mobile screen par text fit karne ke liye */
+                margin-bottom: 40px;
+                letter-spacing: 1px;
+            }
+
+            .enter-btn {
+                padding: 14px 35px; /* Button sizing for small touchscreens */
+                font-size: 1rem;
+                width: 80%;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="home-container">
+        <div class="brand-name">CodingWithAzhan</div>
+        <!-- Link ko badal kar /ai kar diya hai Flask ke mutabiq -->
+        <a href="/ai" class="enter-btn">OPEN ELEXA AI</a>
+    </div>
+</body>
+
+</html>

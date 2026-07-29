@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELEXA | AI INTERFACE</title>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00d2ff;
+            --neon-purple: #9d50bb;
+            --bg-dark: #0a0b10;
+        }
+
+        body {
+            background: var(--bg-dark);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        /* Background Animation Circles */
+        .bg-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: var(--neon-blue);
+            filter: blur(150px);
+            opacity: 0.2;
+            z-index: -1;
+            animation: move 10s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-50%, -50%) scale(0); }
+            to { transform: translate(50%, 50%) scale(2); }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 20px;
+            width: 450px;
+            max-width: 100%;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        input {
+            width: 85%;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--neon-blue);
+            padding: 15px;
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        button {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            border: none;
+            padding: 15px 30px;
+            border-radius: 30px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            margin-top: 10px;
+            width: auto;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-purple);
+        }
+
+        #response {
+            margin-top: 25px;
+            padding: 15px;
+            min-height: 50px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            border-left: 3px solid var(--neon-purple);
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        .visualizer {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+
+        .bar {
+            width: 4px;
+            height: 20px;
+            background: var(--neon-blue);
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { height: 10px; }
+            50% { height: 30px; }
+        }
+
+        /* 📱 360px Mobile Optimization */
+        @media (max-width: 400px) {
+            .container {
+                padding: 30px 15px;
+                border-radius: 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+
+            input {
+                width: 100%;
+                font-size: 0.95rem;
+                padding: 12px 15px;
+            }
+
+            button {
+                width: 100%;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            #response {
+                font-size: 1rem;
+                padding: 12px;
+                min-height: 40px;
+            }
+            
+            .bg-glow {
+                width: 200px;
+                height: 200px;
+                filter: blur(100px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+    
+    <div class="container">
+        <div class="visualizer">
+            <div class="bar" style="animation-delay: 0.1s"></div>
+            <div class="bar" style="animation-delay: 0.2s"></div>
+            <div class="bar" style="animation-delay: 0.3s"></div>
+            <div class="bar" style="animation-delay: 0.4s"></div>
+        </div>
+
+        <h1>ELEXA AI</h1>
+        
+        <div class="input-group">
+            <input type="text" id="userInput" placeholder="Listening for command..." onkeypress="handleKeyPress(event)">
+        </div>
+        
+        <button onclick="sendMessage()">Initiate Command</button>
+        
+        <div id="response">Waiting for input...</div>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const inputField = document.getElementById('userInput');
+            const responseDiv = document.getElementById('response');
+            const msg = inputField.value;
+
+            if(!msg) return;
+
+            responseDiv.innerText = "Processing...";
+            inputField.value = "";
+
+            try {
+                const res = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: msg})
+                });
+                const data = await res.json();
+                responseDiv.innerText = data.reply;
+            } catch (error) {
+                responseDiv.innerText = "Error connecting to Elexa!";
+            }
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
