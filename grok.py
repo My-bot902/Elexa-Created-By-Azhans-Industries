@@ -143,11 +143,25 @@ def process_command(command):
         action = "open_url"
         url = "https://zenfs.com"
         if LOCAL_MODE: webbrowser.open(url)
+        
     elif "subhan" in command:
         response = "Showing picture of Subhan" 
         action = "open_url"
         url = "https://wattpad.com"
         if LOCAL_MODE: webbrowser.open(url)
+
+    elif "basit" in command or "Basit" in command:
+        response = "Showing picture of Sir Basit" 
+        action = "open_url"
+        url = "https://mathigon.org/content/shared/bios/einstein.jpg"
+        if LOCAL_MODE: webbrowser.open(url)
+
+    elif "Imtiaz" in command or "imtiaz" in command:
+        response = "Showing picture of Sir Imtiaz" 
+        action = "open_url"
+        url = "https://p16-common-sign.tiktokcdn.com/tos-alisg-avt-0068/8b3e02202f409e60a42b5a42dbc63437~tplv-tiktokx-cropcenter:1080:1080.jpeg?dr=14579&refresh_token=88c43796&x-expires=1785463200&x-signature=hZ3ybdCDvkIV9iMioLzpvvb7YHs%3D&t=4d5b0474&ps=13740610&shp=a5d48078&shcp=81f88b70&idc=my2"
+        if LOCAL_MODE: webbrowser.open(url)
+
     elif 'naveed' in command:
         response = "Naveed is a cute person and a dangerous coder. He is a secret agent of NASA!"
     elif 'ali' in command:
