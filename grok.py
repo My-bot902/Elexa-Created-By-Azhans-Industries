@@ -64,10 +64,30 @@ def process_command(command):
 
     if "elexa" in command:
         response = "Yes Boss!"
+        
     elif "open youtube" in command or "youtube kholo" in command or "youtube" in command:
         response = "Opening YouTube"
         action = "open_url"
         url = "https://youtube.com"
+        if LOCAL_MODE: webbrowser.open(url)
+
+
+    elif "open instagram" in command or "instagram kholo" in command or "instagram" in command:
+        response = "Opening Instagram"
+        action = "open_url"
+        url = "https://www.instagram.com/?hl=en"
+        if LOCAL_MODE: webbrowser.open(url)
+
+    elif "open tiktok" in command or "tiktok kholo" in command or "tiktok" in command:
+        response = "Opening TikTok"
+        action = "open_url"
+        url = "https://www.tiktok.com/en/"
+        if LOCAL_MODE: webbrowser.open(url)
+
+    elif "open games" in command or "games kholo" in command or "games" in command:
+        response = "Opening Gaming website for you!"
+        action = "open_url"
+        url = "hhttps://poki.com/"
         if LOCAL_MODE: webbrowser.open(url)
 
     elif "open playstore" in command or "playstore kholo" in command or "playstore" in command:
