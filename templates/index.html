@@ -202,34 +202,68 @@
     </div>
 
     <script>
-        async function sendMessage() {
-            const inputField = document.getElementById('userInput');
-            const responseDiv = document.getElementById('response');
-            const msg = inputField.value;
+    // 1. Mobile Browser text-to-speech engine (Server ke bajaye mobile khud bolega)
+    function speakOutLoud(text) {
+        if ('speechSynthesis' in window) {
+            // Agar pehle se kuch chal raha ho to pehle cancel karein
+            window.speechSynthesis.cancel();
+            
+            let utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB'; // British Accent jaisa elexa ka tha
+            utterance.rate = 1.0;     // Speed normal
+            utterance.pitch = 1.1;    // Thodi high pitch digital female voice ke liye
+            
+            window.speechSynthesis.speak(utterance);
+        } else {
+            console.log("Browser does not support Speech Synthesis");
+        }
+    }
 
-            if(!msg) return;
-
-            responseDiv.innerText = "Processing...";
-            inputField.value = "";
-
-            try {
-                const res = await fetch('/ask', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({message: msg})
-                });
-                const data = await res.json();
-                responseDiv.innerText = data.reply;
-            } catch (error) {
-                responseDiv.innerText = "Error connecting to Elexa!";
-            }
+    // 2. Button Click Handler aur API Request
+    document.getElementById("initiate-btn").addEventListener("click", function() {
+        // Aapke input box ki ID check kar lein, agar text-box hai to wahi use karein
+        let inputField = document.getElementById("command-input") || document.querySelector("input[type='text']");
+        let responseDiv = document.getElementById("response-area") || document.querySelector(".response-box") || document.getElementById("response");
+        
+        let userCommand = inputField ? inputField.value : "open youtube"; // backup placeholder
+        
+        if (!userCommand.strip && userCommand === "") {
+            responseDiv.innerText = "Kuch likho ya bolo boss!";
+            return;
         }
 
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') {
-                sendMessage();
+        responseDiv.innerText = "Processing command...";
+
+        // Flask ke `/ask` route par request bhejna
+        fetch('/ask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: userCommand })
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Server ka reply UI par dikhana
+            responseDiv.innerText = data.reply;
+            
+            // MAGIC STEP 1: Mobile khud bol kar batayega response!
+            speakOutLoud(data.reply);
+            
+            // MAGIC STEP 2: Automatic user/dost ke mobile browser par link open karna
+            if (data.action === "open_url" && data.url !== "") {
+                setTimeout(() => {
+                    // New tab mein url open karne ke liye
+                    window.open(data.url, '_blank');
+                }, 1500); // 1.5 seconds ka delay taake pehle bol le voice assistant
             }
-        }
-    </script>
+        })
+        .catch(err => {
+            console.error(err);
+            responseDiv.innerText = "Error contacting Elexa server.";
+        });
+    });
+</script>
+
 </body>
 </html>
