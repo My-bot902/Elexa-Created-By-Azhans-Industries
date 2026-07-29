@@ -69,6 +69,13 @@ def process_command(command):
         action = "open_url"
         url = "https://youtube.com"
         if LOCAL_MODE: webbrowser.open(url)
+
+    elif "open playstore" in command or "playstore kholo" in command or "playstore" in command:
+        response = "Opening Playstore"
+        action = "open_url"
+        url = "https://play.google.com/store/apps?hl=en&pli=1"
+        if LOCAL_MODE: webbrowser.open(url)
+
     elif "google ai" in command or "google ai kholo" in command:
         response = "Opening Google AI"
         action = "open_url"
